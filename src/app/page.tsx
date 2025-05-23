@@ -1,8 +1,12 @@
+"use client";
+
 import { BodyContainer } from "@/components/BodyContainer";
 import { CardContainer } from "@/components/CardContainer";
+import CustomDialog from "@/components/Dialog";
 import { Header } from "@/components/Header";
 import TransactionsRow from "@/components/TransactionRow";
 import TransactionTable from "@/components/TransactionsTable";
+import { useState } from "react";
 
 export interface ITransaction {
   id: number;
@@ -14,6 +18,7 @@ export interface ITransaction {
 }
 
 export default function Home() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const transactions: ITransaction[] = [
     {
       id: 1,
@@ -58,14 +63,15 @@ export default function Home() {
   ];
   return (
     <div>
-      <Header />
+      <Header setIsDialogOpen={setIsDialogOpen}/>
       <BodyContainer>
         <CardContainer />
         <TransactionTable>
           {transactions.map((transaction) => (
-            <TransactionsRow transaction={transaction} />
+            <TransactionsRow key={transaction.id} transaction={transaction} />
           ))}
         </TransactionTable>
+        <CustomDialog title="Cadastrar transação" isOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
       </BodyContainer>
     </div>
   );
