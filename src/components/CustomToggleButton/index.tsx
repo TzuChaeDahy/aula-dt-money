@@ -17,8 +17,8 @@ export default function CustomToggleButton({
   return (
     <button
       className={`${
-        isActive ? "bg-gray-100 border-gray-400" : "bg-transparent border-gray-200"
-      } border  py-6 rounded-md hover:opacity-80 cursor-pointer flex justify-center gap-4 active:bg-gray-200`}
+        isActive ? type === "income" ? "bg-green-200 border-green-400" : "bg-red-200 border-red-400" : "bg-transparent border-gray-200"
+      } border  py-6 rounded-md cursor-pointer flex justify-center gap-4 active:bg-gray-200`}
       onClick={() => setToggleButton(type === "income")}
     >
       <Image src={imgSrc} width={24} height={24} alt={imgAlt} />

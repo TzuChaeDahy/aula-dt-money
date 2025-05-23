@@ -1,11 +1,17 @@
 import { Card } from "../Card";
 
-export function CardContainer(){
-    return (
-        <div className="flex justify-between">
-          <Card title="Entradas" value={100} type="income" />
-          <Card title="Entradas" value={100} type="outcome" />
-          <Card title="Entradas" value={100} type="total" />
-        </div>
-    )
+interface ICardContainerProps {
+  incomes: number;
+  outcomes: number;
+}
+
+export function CardContainer({ incomes, outcomes }: ICardContainerProps) {
+  const total = incomes - outcomes;
+  return (
+    <div className="flex justify-between">
+      <Card title="Entradas" value={incomes} type="income" />
+      <Card title="Saídas" value={outcomes} type="outcome" />
+      <Card title="Total" value={total} type="total" />
+    </div>
+  );
 }

@@ -2,7 +2,7 @@
 
 import { BodyContainer } from "@/components/BodyContainer";
 import { CardContainer } from "@/components/CardContainer";
-import CustomDialog from "@/components/Dialog";
+import CustomDialog from "@/components/CustomDialog";
 import { Header } from "@/components/Header";
 import TransactionsRow from "@/components/TransactionRow";
 import TransactionTable from "@/components/TransactionsTable";
@@ -19,59 +19,41 @@ export interface ITransaction {
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const transactions: ITransaction[] = [
-    {
-      id: 1,
-      title: "Compra no supermercado",
-      price: 150.75,
-      category: "Alimentação",
-      status: "outcome",
-      date: "2025-05-15",
-    },
-    {
-      id: 2,
-      title: "Assinatura Netflix",
-      price: 39.9,
-      category: "Entretenimento",
-      status: "outcome",
-      date: "2025-05-10",
-    },
-    {
-      id: 3,
-      title: "Salário",
-      price: 3500.0,
-      category: "Renda",
-      status: "income",
-      date: "2025-05-01",
-    },
-    {
-      id: 4,
-      title: "Gasolina",
-      price: 220.0,
-      category: "Transporte",
-      status: "outcome",
-      date: "2025-05-12",
-    },
-    {
-      id: 5,
-      title: "Consulta médica",
-      price: 180.0,
-      category: "Saúde",
-      status: "outcome",
-      date: "2025-05-08",
-    },
-  ];
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
+
+  const incomes = transactions
+    .filter((transaction) => transaction.status === "income")
+    .reduce((acc, transaction) => acc + transaction.price, 0);
+  const outcomes = transactions
+    .filter((transaction) => transaction.status === "outcome")
+    .reduce((acc, transaction) => acc + transaction.price, 0);
   return (
     <div>
-      <Header setIsDialogOpen={setIsDialogOpen}/>
+      <Header setIsDialogOpen={setIsDialogOpen} />
       <BodyContainer>
-        <CardContainer />
+        <CardContainer incomes={incomes} outcomes={outcomes} />
         <TransactionTable>
-          {transactions.map((transaction) => (
-            <TransactionsRow key={transaction.id} transaction={transaction} />
-          ))}
+          {transactions.length > 0
+            ? transactions.map((transaction) => (
+                <TransactionsRow
+                  key={transaction.id}
+                  transaction={transaction}
+                  setTransactions={setTransactions}
+                />
+              ))
+            : null}
         </TransactionTable>
-        <CustomDialog title="Cadastrar transação" isOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
+        {transactions.length > 0 ? null : (
+          <h2 className="flex justify-center text-title">
+            Ainda não existem transações cadastradas.
+          </h2>
+        )}
+        <CustomDialog
+          dialogTitle="Cadastrar transação"
+          isOpen={isDialogOpen}
+          setIsDialogOpen={setIsDialogOpen}
+          setTransactions={setTransactions}
+        />
       </BodyContainer>
     </div>
   );
